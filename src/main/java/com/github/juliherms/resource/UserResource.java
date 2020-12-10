@@ -12,12 +12,35 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.jboss.logging.Logger;
+
 import com.github.juliherms.model.User;
 
 @Path("/users")
 public class UserResource {
 
+	private static final Logger LOG = Logger.getLogger(UserResource.class);
+
 	List<User> users = new ArrayList<User>();
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<User> list() {
+
+		LOG.info("***** " + LOG.getClass().getSimpleName() + ": INFO *****");
+		initUsers();
+		logginglevels();
+		return users;
+	}
+
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response inserir(User user) {
+
+		this.users.add(user);
+		return Response.status(Status.CREATED).build();
+
+	}
 
 	private void initUsers() {
 
@@ -34,21 +57,14 @@ public class UserResource {
 
 	}
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<User> list() {
-
-		initUsers();
-		return users;
-	}
-
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response inserir(User user) {
-
-		this.users.add(user);
-		return Response.status(Status.CREATED).build();
-
+	void logginglevels() {
+		System.out.println("----------------------------------------");
+		LOG.fatal("***** " + LOG.getClass().getSimpleName() + ": FATAL *****");
+		LOG.error("***** " + LOG.getClass().getSimpleName() + ": ERROR *****");
+		LOG.warn("***** " + LOG.getClass().getSimpleName() + ": WARN *****");
+		LOG.info("***** " + LOG.getClass().getSimpleName() + ": INFO *****");
+		LOG.debug("***** " + LOG.getClass().getSimpleName() + ": DEBUG *****");
+		LOG.trace("***** " + LOG.getClass().getSimpleName() + ": TRACE *****");
 	}
 
 }
